@@ -27,12 +27,8 @@ public class Funcionario {
 	
 	public void ExibirDetalhes() {
 		double valorVendido = 0;
-		for(int i = 0; i < oficina.getVendas().size(); i++) {
-			var venda = oficina.getVendas().get(i);
-			if(venda.getFuncionarioId().equals(id)) {
-				valorVendido += venda.getValor();
-			}
-		}
+		var vendas = oficina.vendas.VendasFuncionario(id);
+		for(int i = 0; i < vendas.size(); i++) valorVendido += vendas.get(i).getValor();
 		System.out.println("----------\nNome: " + nome + "\nId: " + id + "\nValor vendido: " + valorVendido + "\n----------");
 	}
 	
@@ -42,20 +38,18 @@ public class Funcionario {
 		var scanner = new Scanner(System.in);
 		System.out.println("Nome do cliente:");
 		var nomeCliente = scanner.nextLine();
-		var clientes = oficina.getClientes();
-		Cliente cliente = null;
-		for(int i = 0; i < clientes.size(); i++) if(clientes.get(i).nome.equals(nomeCliente)) cliente = clientes.get(i);
+		var cliente = oficina.clientes.RecuperarPorNome(nomeCliente);
 		if(cliente != null) {
 			System.out.println("Nome do produto associado à venda:");
 			var produtoNome = scanner.nextLine();
 			System.out.println("Quantidade:");
 			var produtoQtd = scanner.nextInt();
-			var produto = oficina.RemoverEstoque(produtoNome, produtoQtd);
+			var produto = oficina.estoque.RemoverEstoque(produtoNome, produtoQtd);
 			if(produto != null) {
 				System.out.println("Descrição da venda:");
 				scanner.nextLine(); // limpando o buffer
 				var descricao = scanner.nextLine();
-				var id = oficina.getVendas().size();
+				var id = oficina.vendas.Tam();
 				System.out.println("Valor do serviço:");
 				var valor = scanner.nextDouble();
 				var veiculos = Veiculos.values();
@@ -74,7 +68,7 @@ public class Funcionario {
 					opcao = scanner.nextInt();
 				} while(opcao < 0 || opcao > 1);
 				if(opcao == 1) {
-					oficina.getVendas().add(novaVenda); // Implementar método próprio para adição nas vendas
+					oficina.vendas.Adicionar(novaVenda);
 					historico.add(novaVenda);
 					System.out.println("Venda registrada com sucesso.");
 				}
@@ -90,8 +84,7 @@ public class Funcionario {
 		var scanner = new Scanner(System.in);
 		System.out.println("Nome do cliente:");
 		var nome = scanner.nextLine();
-		oficina.getClientes().add(new Cliente(nome));
-		System.out.println("CLiente cadastrado com sucesso.");
+		oficina.clientes.Adicionar(new Cliente(nome));
 	}
 	
 	public void AdicinarEstoque() {
@@ -100,16 +93,10 @@ public class Funcionario {
 		var nome = scanner.nextLine();
 		System.out.println("Quantidade:");
 		var qtd = scanner.nextInt();
-		oficina.AdicionarEstoque(nome, qtd);
+		oficina.estoque.AdicionarEstoque(nome, qtd);
 	}
 	
-	public void VerEstoque() { // Adicinar esse metodo aos menus
-		System.out.println("Estoque:");
-		var estoque = oficina.getEstoque();
-		Produto produto;
-		for(int i = 0; i < estoque.size(); i++) {
-			produto = estoque.get(i);
-			System.out.println(produto.nome + " - qtd: " + produto.qtd);
-		}
+	public void VerEstoque() {
+		oficina.estoque.VerEstoque();
 	}
 }

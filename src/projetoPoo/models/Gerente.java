@@ -15,15 +15,10 @@ public class Gerente extends Funcionario {
 		var nome = scanner.nextLine();
 		System.out.println("Senha:");
 		var senha = scanner.nextLine();
-		this.oficina.getFuncionarios().add(new Funcionario(nome, senha, this.oficina, Cargos.funcionario));
-		System.out.println("Funcionario adicionado.");
+		this.oficina.funcionarios.Adicionar(new Funcionario(nome, senha, this.oficina, Cargos.funcionario));
 	}
 
 	public void VerSaldo() {
-		double saldo = 0;
-		for(int i = 0; i < this.oficina.getVendas().size(); i++) {
-			saldo += this.oficina.getVendas().get(i).getValor();
-		}
-		System.out.println("Saldo total: " + saldo);
+		System.out.println("Saldo total: " + oficina.vendas.SaldoTotal());
 	}
 }

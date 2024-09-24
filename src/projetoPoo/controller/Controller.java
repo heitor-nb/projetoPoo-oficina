@@ -40,12 +40,8 @@ public class Controller {
 			else System.out.println("Senha incorreta.");
 		}
 		else {
-			int index = -1;
-			for(int i = 0; i < oficina.getFuncionarios().size(); i++) {
-				if(oficina.getFuncionarios().get(i).nome.equals(nome)) index = i;
-			}
-			if(index != -1) {
-				var funcionario = oficina.getFuncionarios().get(index);
+			var funcionario = oficina.funcionarios.RecuperarPorNome(nome);
+			if(funcionario != null) {
 				System.out.println("Bem-vindo(a) " + nome + "\nSenha:");
 				var senha = scanner.nextLine();
 				if(senha.equals(funcionario.getPass())) menus.get(funcionario.cargo).Executar(funcionario);
